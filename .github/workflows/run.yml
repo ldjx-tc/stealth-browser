@@ -30,5 +30,7 @@ jobs:
           pip install DrissionPage requests
 
       - name: Run Script
+        env:
+          PYTHONUNBUFFERED: "1"
         run: |
-          python main.py
+          python -u main.py

@@ -164,6 +164,8 @@ def run(headless=False):
     co.auto_port()
     co.set_argument('--test-type')
     co.set_argument('--no-sandbox')
+    co.set_argument('--disable-dev-shm-usage')
+    co.set_argument('--disable-gpu')
     co.set_argument('--disable-blink-features=AutomationControlled')
     co.set_user_agent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36')
     page = ChromiumPage(co)
@@ -190,4 +192,6 @@ def run(headless=False):
 
 if __name__ == '__main__':
     headless = os.getenv('CI') is not None or os.getenv('HEADLESS') == 'true'
-    run(headless=headless)
+    page = run(headless=headless)
+    if headless and page:
+        page.quit()
