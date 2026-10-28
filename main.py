@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import time
 import uuid
 import random
@@ -204,7 +205,7 @@ def run(headless=False):
     return page
 
 if __name__ == '__main__':
-    headless = os.getenv('CI') is not None or os.getenv('HEADLESS') == 'true'
+    headless = os.getenv('CI') is not None or os.getenv('HEADLESS') == 'true' or (sys.platform == 'linux' and not os.getenv('DISPLAY'))
     page = run(headless=headless)
     if headless and page:
         page.quit()
