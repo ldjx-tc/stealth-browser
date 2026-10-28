@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import shutil
 import time
 import uuid
 import random
@@ -172,16 +173,24 @@ def run(headless=False):
     print('[+] 正在启动浏览器...')
     co = ChromiumOptions()
     if headless:
-        co.headless(True)
+        co.set_argument('--headless=new')
     co.auto_port()
-    co.set_argument('--test-type')
     co.set_argument('--no-sandbox')
     co.set_argument('--disable-dev-shm-usage')
     co.set_argument('--disable-gpu')
+    co.set_argument('--disable-software-rasterizer')
+    co.set_argument('--test-type')
     co.set_argument('--disable-blink-features=AutomationControlled')
     co.set_argument('--lang=zh-CN')
     co.set_pref('intl.accept_languages', 'zh-CN,zh')
     co.set_user_agent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36')
+
+    for b in ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser']:
+        p = shutil.which(b)
+        if p:
+            co.set_browser_path(p)
+            break
+
     page = ChromiumPage(co)
 
     print('[+] 正在打开 https://muse.ai')
