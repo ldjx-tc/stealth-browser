@@ -191,7 +191,17 @@ def run(headless=False):
             co.set_browser_path(p)
             break
 
+    proxy_url = os.getenv('BROWSER_PROXY', 'http://127.0.0.1:8899')
+    co.set_proxy(proxy_url)
+
     page = ChromiumPage(co)
+
+    print('[+] 正在检查代理出口...')
+    if not page.get('https://ip.decodo.com/json'):
+        raise RuntimeError('代理测试失败，请检查 GOST 是否启动及 Decodo 配置')
+
+    print('[+] 代理出口信息：')
+    print(page.ele('tag:body').text)
 
     print('[+] 正在打开 https://muse.ai')
     page.get('https://muse.ai')
